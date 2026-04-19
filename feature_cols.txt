@@ -1,0 +1,15 @@
+latitude
+longitude
+lat_grid
+lon_grid
+ssta
+ssta_abs
+year
+quarter
+month_sin
+month_cos
+doy_sin
+doy_cos
+lat_x_month
+lon_x_month
+lat_squared
