@@ -292,7 +292,7 @@ def main():
     with tab2:
         heatmap_tab(model, scaler)
 
-    st.markdown("---")
+    st.markdown("----")
     st.markdown("<center>Marine Water Quality Prediction System</center>", unsafe_allow_html=True)
 
 # =========================

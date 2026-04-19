@@ -188,9 +188,9 @@ for name, model in models.items():
     print(f"Test RMSE  : {test_rmse:.3f}")
     print(f"R² Score   : {test_r2:.4f}")
 
-    # =========================
+    # ==========================
     # OVERFITTING / UNDERFITTING CHECK
-    # =========================
+    # ==========================
 
     if test_rmse > train_rmse * 1.5:
         print("⚠️ Overfitting detected")
