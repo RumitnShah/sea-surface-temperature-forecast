@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 
-# 📂 Folder where your .nc files are stored
+# Folder where your .nc files are stored
 data_folder = r"C:\Users\HP\OneDrive\Documents\GitHub\marine-water-quality-classification\files"   # change this path
 
 # 📁 Output CSV file
