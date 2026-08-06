@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
+from artifacts import read_model_name
 
 # =========================
 # PAGE CONFIGURATION
@@ -29,7 +30,7 @@ def configure_page():
 def load_artifacts():
     model = pickle.load(open("best_model.pkl", "rb"))
     scaler = pickle.load(open("scaler_X.pkl", "rb"))
-    name = open("best_model_name.txt").read().strip()
+    name = read_model_name(model)
     return model, scaler, name
 
 # =========================
@@ -100,6 +101,71 @@ def sst_safety(sst):
         return "⚠️ High"
     else:
         return "🔥 Extreme"
+
+# =========================
+# PREDICTION VISUALIZATION
+# =========================
+
+def monthly_prediction_series(model, scaler, lat, lon, year):
+    predictions = []
+
+    for month in range(1, 13):
+        doy = int(pd.Timestamp(year=int(year), month=month, day=15).day_of_year)
+        features = build_features(lat, lon, year, month, doy)
+        scaled = scaler.transform(features)
+        predictions.append(float(model.predict(scaled)[0]))
+
+    return pd.DataFrame({
+        "Month": list(range(1, 13)),
+        "Predicted SST": predictions
+    })
+
+def plot_temperature_band(sst):
+    bands = [
+        (-2, 10, "Cold", "#4FC3F7"),
+        (10, 20, "Moderate", "#81C784"),
+        (20, 28, "Warm", "#FFB74D"),
+        (28, 32, "High", "#FB8C00"),
+        (32, 40, "Extreme", "#E53935"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(9, 2.2))
+
+    for start, end, label, color in bands:
+        ax.axvspan(start, end, color=color, alpha=0.32)
+        ax.text((start + end) / 2, 0.58, label, ha="center", va="center",
+                fontsize=9, fontweight="bold")
+
+    ax.axvline(sst, color="#111111", linewidth=2.5)
+    ax.scatter([sst], [0.25], color="#111111", s=70, zorder=3)
+    ax.text(sst, 0.08, f"{sst:.2f} °C", ha="center", va="center",
+            fontsize=10, fontweight="bold")
+
+    ax.set_xlim(-2, 40)
+    ax.set_ylim(0, 1)
+    ax.set_yticks([])
+    ax.set_xlabel("Predicted Sea Surface Temperature (°C)")
+    ax.set_title("Predicted Temperature Risk Band")
+    ax.grid(axis="x", alpha=0.2)
+    fig.tight_layout()
+    return fig
+
+def plot_monthly_prediction(monthly_predictions):
+    fig, ax = plt.subplots(figsize=(9, 4))
+    ax.plot(
+        monthly_predictions["Month"],
+        monthly_predictions["Predicted SST"],
+        marker="o",
+        linewidth=2.4,
+        color="#0B7285"
+    )
+    ax.set_xticks(range(1, 13))
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Predicted SST (°C)")
+    ax.set_title("Monthly Predicted Sea Surface Temperature")
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
+    return fig
 
 # =========================
 # NEW WATER QUALITY FUNCTIONS
@@ -175,6 +241,16 @@ def prediction_tab(model, scaler):
         # =========================
 
         st.metric("🌡 SST", f"{sst:.2f} °C")
+
+        st.markdown("### 📈 Prediction Graphs")
+        band_fig = plot_temperature_band(sst)
+        st.pyplot(band_fig)
+        plt.close(band_fig)
+
+        monthly_predictions = monthly_prediction_series(model, scaler, lat, lon, year)
+        monthly_fig = plot_monthly_prediction(monthly_predictions)
+        st.pyplot(monthly_fig)
+        plt.close(monthly_fig)
 
         region = get_region(lat, lon)
         st.success(f"📍 Location: {region}")

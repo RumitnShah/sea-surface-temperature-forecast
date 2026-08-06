@@ -179,3 +179,18 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Project artifacts
+best_model.pkl
+scaler_X.pkl
+feature_cols.txt
+best_model_name.txt
+*_model.pkl
+actual_vs_predicted.png
+model_comparison.png
+residual_plot.png
+correlation_heatmap.png
+sst_distribution.png
+sst_monthly.png
+sst_vs_latitude.png
+sst_yearly.png
