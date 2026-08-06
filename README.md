@@ -12,13 +12,6 @@ This repository combines data conversion from NetCDF files, feature engineering,
 - Saves the best model, scaler, and feature schema for reuse.
 - Provides a Streamlit interface for SST prediction, monthly trends, and heatmap visualization.
 
-## Why it is resume-worthy
-
-- It is an end-to-end ML system, not just a notebook.
-- It includes reusable artifacts and a clear feature contract.
-- It shows data engineering, modeling, and app deployment skills together.
-- It adds domain interpretation for marine habitat and water quality analysis.
-
 ## Tech Stack
 
 - Python
@@ -66,15 +59,3 @@ The training pipeline produces:
 - `scaler_X.pkl`
 - `feature_cols.txt`
 - evaluation plots such as `model_comparison.png`, `actual_vs_predicted.png`, and `residual_plot.png`
-
-## Resume Bullet Ideas
-
-- Built an end-to-end marine SST prediction pipeline using Python, scikit-learn, XGBoost, and Streamlit.
-- Engineered spatial and seasonal features from ocean temperature data and compared multiple regression models.
-- Deployed an interactive dashboard for SST prediction, monthly forecasting, and heatmap-based marine analysis.
-
-## Notes
-
-- The repository now loads the model name safely even if `best_model_name.txt` is absent.
-- For the best presentation, keep generated artifacts up to date and avoid committing local environment folders.
-
